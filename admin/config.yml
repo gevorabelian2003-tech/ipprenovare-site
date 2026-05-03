@@ -1,0 +1,109 @@
+# Configuration Decap CMS — IPP Renovare
+# Documentation : https://decapcms.org/docs/
+
+backend:
+  name: git-gateway
+  branch: main
+
+# Branche pour publier directement (pas de workflow editorial pour rester simple)
+publish_mode: simple
+
+# Stockage des images et médias
+media_folder: "assets/images/uploads"
+public_folder: "/assets/images/uploads"
+
+# Langue de l'interface
+locale: "fr"
+
+# Format de sortie : Markdown avec frontmatter YAML
+slug:
+  encoding: "ascii"
+  clean_accents: true
+  sanitize_replacement: "-"
+
+collections:
+
+  # ========================================
+  # COLLECTION 1 : Articles de blog (création de nouveaux articles)
+  # ========================================
+  - name: "articles"
+    label: "📝 Articles de blog"
+    label_singular: "Article"
+    folder: "_articles"
+    create: true
+    delete: true
+    extension: "md"
+    format: "yaml-frontmatter"
+    slug: "{{slug}}"
+    summary: "{{title}} — {{date | date('DD/MM/YYYY')}}"
+    preview_path: "blog.html"
+    fields:
+      - { label: "Titre de l'article", name: "title", widget: "string", hint: "Le titre qui apparaîtra en gros en haut" }
+      - { label: "Description courte (SEO)", name: "description", widget: "string", hint: "150 caractères max — apparaît dans Google" }
+      - label: "Catégorie"
+        name: "category"
+        widget: "select"
+        options:
+          - { label: "Guide", value: "guide" }
+          - { label: "Prix & budget", value: "prix" }
+          - { label: "Projet", value: "projet" }
+          - { label: "Local", value: "local" }
+          - { label: "Tendance", value: "tendance" }
+      - { label: "Date de publication", name: "date", widget: "datetime", default: "" }
+      - { label: "Image de couverture", name: "image", widget: "image", required: false, hint: "Optionnel" }
+      - { label: "Auteur", name: "author", widget: "string", default: "Abelyan Arkadi" }
+      - { label: "Temps de lecture (min)", name: "readtime", widget: "number", default: 8, min: 1, max: 30 }
+      - { label: "Sous-catégorie (affichée à côté de la date)", name: "subcategory", widget: "string", default: "Conseils" }
+      - { label: "Extrait (visible sur la page Blog)", name: "extrait", widget: "text", hint: "2-3 lignes pour donner envie de cliquer" }
+      - label: "Contenu de l'article"
+        name: "body"
+        widget: "markdown"
+        hint: "Écrivez votre article comme dans Word — vous pouvez mettre en gras, en italique, faire des titres, des listes, insérer des images, etc."
+
+  # ========================================
+  # COLLECTION 2 : Pages principales (édition simple des contenus)
+  # ========================================
+  - name: "pages"
+    label: "📄 Pages principales"
+    label_singular: "Page"
+    files:
+      - file: "_pages/accueil.md"
+        label: "Page d'accueil"
+        name: "accueil"
+        fields:
+          - { label: "Titre principal (Hero)", name: "hero_titre", widget: "string" }
+          - { label: "Sous-titre Hero", name: "hero_sous", widget: "text" }
+          - { label: "Surtitre Hero", name: "hero_surtitre", widget: "string" }
+          - { label: "Nombre d'années d'expérience", name: "annees", widget: "number", default: 10 }
+          - { label: "Nombre de chantiers", name: "chantiers", widget: "number", default: 500 }
+
+      - file: "_pages/contact.md"
+        label: "Page Contact"
+        name: "contact"
+        fields:
+          - { label: "Téléphone principal", name: "tel1", widget: "string" }
+          - { label: "Téléphone secondaire", name: "tel2", widget: "string" }
+          - { label: "Email", name: "email", widget: "string" }
+          - { label: "Horaires", name: "horaires", widget: "string" }
+          - { label: "Adresse complète", name: "adresse", widget: "text" }
+
+  # ========================================
+  # COLLECTION 3 : Avis clients (gérer les témoignages)
+  # ========================================
+  - name: "avis"
+    label: "⭐ Avis clients"
+    label_singular: "Avis"
+    folder: "_avis"
+    create: true
+    delete: true
+    extension: "md"
+    format: "yaml-frontmatter"
+    slug: "{{slug}}"
+    fields:
+      - { label: "Prénom + initiale (ex: Marie L.)", name: "auteur", widget: "string" }
+      - { label: "Ville", name: "ville", widget: "string" }
+      - { label: "Type de prestation", name: "prestation", widget: "string" }
+      - { label: "Note (sur 5)", name: "note", widget: "number", default: 5, min: 1, max: 5 }
+      - { label: "Texte de l'avis", name: "texte", widget: "text" }
+      - { label: "Source", name: "source", widget: "select", options: ["Google", "Pages Jaunes", "Bouche-à-oreille", "Autre"], default: "Google" }
+      - { label: "Date", name: "date", widget: "datetime" }
