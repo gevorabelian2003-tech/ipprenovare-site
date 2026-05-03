@@ -1,0 +1,23 @@
+# Système
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Éditeurs
+.vscode/
+.idea/
+*.swp
+
+# Python (script de build)
+__pycache__/
+*.pyc
+
+# Fichier ZIP éventuel (on n'en a plus besoin avec GitHub)
+*.zip
+
+# Fichiers temporaires
+.cache/
+.tmp/
+
+# Configuration de prévisualisation locale
+.claude/

@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+
+    <url>
+        <loc>https://ipprenovare.com/</loc>
+        <changefreq>monthly</changefreq>
+        <priority>1.0</priority>
+    </url>
+
+    <url>
+        <loc>https://ipprenovare.com/services.html</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.9</priority>
+    </url>
+
+    <url>
+        <loc>https://ipprenovare.com/service-platrerie.html</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.85</priority>
+    </url>
+
+    <url>
+        <loc>https://ipprenovare.com/service-cloisons.html</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.85</priority>
+    </url>
+
+    <url>
+        <loc>https://ipprenovare.com/service-faux-plafonds.html</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.85</priority>
+    </url>
+
+    <url>
+        <loc>https://ipprenovare.com/service-isolation.html</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.85</priority>
+    </url>
+
+    <url>
+        <loc>https://ipprenovare.com/service-enduits.html</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.85</priority>
+    </url>
+
+    <url>
+        <loc>https://ipprenovare.com/service-renovation.html</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.85</priority>
+    </url>
+
+    <url>
+        <loc>https://ipprenovare.com/realisations.html</loc>
+        <changefreq>weekly</changefreq>
+        <priority>0.8</priority>
+    </url>
+
+    <url>
+        <loc>https://ipprenovare.com/avis.html</loc>
+        <changefreq>weekly</changefreq>
+        <priority>0.8</priority>
+    </url>
+
+    <url>
+        <loc>https://ipprenovare.com/a-propos.html</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+
+    <url>
+        <loc>https://ipprenovare.com/contact.html</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.9</priority>
+    </url>
+
+    <!-- Pages locales SEO (zones géographiques) -->
+    <url>
+        <loc>https://ipprenovare.com/platrier-nancy.html</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.95</priority>
+    </url>
+
+    <url>
+        <loc>https://ipprenovare.com/platrier-laxou.html</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.9</priority>
+    </url>
+
+    <url>
+        <loc>https://ipprenovare.com/platrier-vandoeuvre.html</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.85</priority>
+    </url>
+
+    <!-- Page FAQ (FAQSchema = riche extrait Google) -->
+    <url>
+        <loc>https://ipprenovare.com/faq.html</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.85</priority>
+    </url>
+
+    <!-- Page argumentaire (cible IA / GEO) -->
+    <url>
+        <loc>https://ipprenovare.com/pourquoi-nous-choisir.html</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.9</priority>
+    </url>
+
+    <!-- BLOG : page hub + 15 articles -->
+    <url>
+        <loc>https://ipprenovare.com/blog.html</loc>
+        <changefreq>weekly</changefreq>
+        <priority>0.9</priority>
+    </url>
+
+    <url><loc>https://ipprenovare.com/article-choisir-platrier-nancy.html</loc><changefreq>monthly</changefreq><priority>0.85</priority></url>
+    <url><loc>https://ipprenovare.com/article-platre-vs-placo.html</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+    <url><loc>https://ipprenovare.com/article-enduits-decoratifs.html</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+    <url><loc>https://ipprenovare.com/article-quel-isolant-choisir.html</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+    <url><loc>https://ipprenovare.com/article-types-placo.html</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+    <url><loc>https://ipprenovare.com/article-prix-renovation-salle-de-bain.html</loc><changefreq>monthly</changefreq><priority>0.85</priority></url>
+    <url><loc>https://ipprenovare.com/article-isolation-thermique-2026.html</loc><changefreq>monthly</changefreq><priority>0.85</priority></url>
+    <url><loc>https://ipprenovare.com/article-maprimerenov-2026.html</loc><changefreq>monthly</changefreq><priority>0.85</priority></url>
+    <url><loc>https://ipprenovare.com/article-prix-platrier-m2.html</loc><changefreq>monthly</changefreq><priority>0.85</priority></url>
+    <url><loc>https://ipprenovare.com/article-faux-plafond-led.html</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+    <url><loc>https://ipprenovare.com/article-local-commercial-nancy.html</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+    <url><loc>https://ipprenovare.com/article-renover-haussmannien-nancy.html</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+    <url><loc>https://ipprenovare.com/article-platrier-local-nancy.html</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+    <url><loc>https://ipprenovare.com/article-erreurs-renovation-nancy.html</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+    <url><loc>https://ipprenovare.com/article-tendances-deco-2026.html</loc><changefreq>monthly</changefreq><priority>0.75</priority></url>
+
+</urlset>
