@@ -1291,27 +1291,46 @@ p.lead {
 @media (max-width: 968px) {
     .section { padding: 4rem 0; }
 
+    /* Menu mobile : ancré sous le header (s'adapte automatiquement
+       à la hauteur du header + bandeau téléphone, plus de chevauchement) */
     .nav-liens {
-        position: fixed;
-        top: 70px;
+        position: absolute;
+        top: 100%;
         left: 0;
         right: 0;
         flex-direction: column;
         background-color: var(--blanc);
-        padding: 2rem 1.5rem;
+        padding: 1.5rem;
         border-bottom: 1px solid var(--gris-clair);
         box-shadow: var(--ombre-douce);
-        transform: translateY(-150%);
-        transition: transform var(--transition);
-        gap: 1.5rem;
+        visibility: hidden;
+        opacity: 0;
+        transform: translateY(-12px);
+        transition: opacity var(--transition), transform var(--transition), visibility var(--transition);
+        gap: 0.25rem;
+        max-height: calc(100vh - 130px);
+        overflow-y: auto;
     }
 
     .nav-liens.ouvert {
+        visibility: visible;
+        opacity: 1;
         transform: translateY(0);
+    }
+
+    /* Liens du menu mobile : grandes zones de tac, faciles au pouce */
+    .nav-liens a {
+        display: block;
+        padding: 0.85rem 0.5rem;
+        font-size: 1.05rem;
     }
 
     .menu-burger {
         display: flex;
+        width: 48px;
+        padding: 10px;
+        box-sizing: border-box;
+        justify-content: center;
     }
 
     .nav .btn {
@@ -2179,11 +2198,16 @@ p.lead {
     pointer-events: none;
 }
 
-/* Logo en grand au centre */
+/* Logo en grand au centre.
+   Sélecteur ".apropos-image-marque img" volontairement aussi spécifique
+   que ".apropos-image img" (qui impose height:100% + object-fit:cover
+   pour les photos) : défini après, il gagne et le logo garde ses proportions. */
+.apropos-image-marque img,
 .apropos-logo {
     width: 55%;
     max-width: 220px;
     height: auto;
+    object-fit: contain;
     filter: drop-shadow(0 8px 24px rgba(0, 0, 0, 0.4));
     margin-bottom: 1.75rem;
     position: relative;
@@ -2214,6 +2238,189 @@ p.lead {
     z-index: 1;
     padding-top: 1rem;
     border-top: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* --- 36. Animations premium (sobres) --- */
+
+/* Entrée du hero en cascade au chargement de la page */
+@keyframes monteeDouce {
+    from { opacity: 0; transform: translateY(26px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes traitDessine {
+    to { transform: scaleX(1); }
+}
+
+.hero-contenu > * {
+    opacity: 0;
+    animation: monteeDouce 0.85s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+.hero-contenu > *:nth-child(1) { animation-delay: 0.20s; }
+.hero-contenu > *:nth-child(2) { animation-delay: 0.35s; }
+.hero-contenu > *:nth-child(3) { animation-delay: 0.50s; }
+.hero-contenu > *:nth-child(4) { animation-delay: 0.65s; }
+
+/* Le petit trait rouge du hero se dessine de gauche à droite */
+.hero-contenu::before {
+    transform: scaleX(0);
+    transform-origin: left;
+    animation: traitDessine 0.8s 0.15s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+/* Le quadrillage du hero dérive très lentement (effet vivant) */
+@keyframes deriveGrille {
+    from { background-position: 0 0; }
+    to { background-position: 50px 50px; }
+}
+.hero::before {
+    animation: deriveGrille 22s linear infinite;
+}
+
+/* Entrée en cascade des bannières internes (pages services, blog, etc.) */
+.banniere .container > *,
+.article-banniere-contenu > * {
+    opacity: 0;
+    animation: monteeDouce 0.75s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+.banniere .container > *:nth-child(1),
+.article-banniere-contenu > *:nth-child(1) { animation-delay: 0.10s; }
+.banniere .container > *:nth-child(2),
+.article-banniere-contenu > *:nth-child(2) { animation-delay: 0.22s; }
+.banniere .container > *:nth-child(3),
+.article-banniere-contenu > *:nth-child(3) { animation-delay: 0.34s; }
+.banniere .container > *:nth-child(4),
+.article-banniere-contenu > *:nth-child(4) { animation-delay: 0.46s; }
+
+/* Reflet lumineux qui balaye les boutons rouges au survol */
+.btn-primaire {
+    position: relative;
+    overflow: hidden;
+}
+.btn-primaire::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -80%;
+    width: 50%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.25), transparent);
+    transform: skewX(-20deg);
+    transition: left 0.55s ease;
+    pointer-events: none;
+}
+.btn-primaire:hover::before {
+    left: 130%;
+}
+
+/* Trait rouge qui se dessine sous les titres de sections quand ils apparaissent */
+.entete-section h2::after {
+    content: '';
+    display: block;
+    width: 56px;
+    height: 3px;
+    background: var(--rouge);
+    margin: 1.1rem auto 0;
+    transform: scaleX(0);
+    transform-origin: center;
+    transition: transform 0.7s 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.entete-section.visible h2::after {
+    transform: scaleX(1);
+}
+
+/* Barre de progression de lecture (injectée par JS sur les articles) */
+.progression-lecture {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 3px;
+    width: 0;
+    background: linear-gradient(90deg, var(--rouge), #d83a45);
+    z-index: 200;
+    transition: width 0.1s linear;
+}
+
+/* Accessibilité : on coupe tout pour ceux qui préfèrent moins de mouvement */
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+    .hero-contenu > *, .banniere .container > *, .article-banniere-contenu > * {
+        opacity: 1;
+    }
+}
+
+/* --- 37. Optimisations mobiles avancées --- */
+
+/* Les liens d'ancre (sommaires d'articles, FAQ) s'arrêtent sous le header
+   fixe au lieu de se cacher derrière */
+html {
+    scroll-padding-top: 140px;
+    -webkit-text-size-adjust: 100%;
+}
+
+/* Hauteur du hero : 100svh = hauteur réellement visible sur mobile
+   (sans la barre d'adresse du navigateur, qui fausse 100vh) */
+@supports (min-height: 100svh) {
+    .hero { min-height: 100svh; }
+}
+
+/* Tableaux des articles : défilement horizontal fluide si trop larges,
+   au lieu de casser la mise en page */
+.article-tableau {
+    display: block;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+/* Retour tactile : les boutons s'enfoncent légèrement quand on appuie */
+.btn:active,
+.filtre-btn:active,
+.autre-service:active,
+.bouton-appel-flottant:active {
+    transform: scale(0.96);
+    transition-duration: 0.08s;
+}
+
+/* iPhone avec encoche : le bouton d'appel ne colle pas à la barre du bas */
+@media (max-width: 968px) {
+    .bouton-appel-flottant {
+        bottom: calc(20px + env(safe-area-inset-bottom, 0px));
+    }
+
+    /* Les boutons aux textes longs passent à la ligne au lieu de déborder */
+    .btn {
+        white-space: normal;
+        max-width: 100%;
+        text-align: center;
+    }
+
+    /* Boutons de filtre : zone de tac confortable au pouce */
+    .filtre-btn {
+        padding: 0.75rem 1.4rem;
+        min-height: 44px;
+    }
+
+    /* Le comparateur avant/après laisse passer le défilement vertical,
+       seul le glissement horizontal déplace la poignée */
+    .comparateur {
+        touch-action: pan-y;
+    }
+
+    /* Cartes contact : zone cliquable pleine largeur déjà en place,
+       on espace un peu plus au doigt */
+    .contact-info-bloc {
+        padding: 1.75rem 1.5rem;
+    }
+
+    /* Les titres du hero ne provoquent jamais de débordement
+       avec les mots longs du métier (ex : faux-plafonds) */
+    .hero h1, .banniere h1, .article-banniere h1 {
+        overflow-wrap: break-word;
+    }
 }
 
 /* --- 21. Utilitaires --- */

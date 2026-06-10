@@ -54,13 +54,29 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     /* --- 3. Animations au scroll (fade-in quand l'élément devient visible) --- */
+    const mouvementReduit = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const elementsAnimes = document.querySelectorAll('.fade-in');
+
+    // Effet domino : dans une même grille, les cartes apparaissent l'une après l'autre
+    if (!mouvementReduit) {
+        document.querySelectorAll('.grille-services, .blog-grille, .galerie-grille, .benefices, .materiaux, .tarifs, .timeline, .grille').forEach(grille => {
+            grille.querySelectorAll(':scope > .fade-in').forEach((el, i) => {
+                el.style.transitionDelay = Math.min(i * 90, 540) + 'ms';
+                el.dataset.delaiDomino = '1';
+            });
+        });
+    }
+
     if ('IntersectionObserver' in window && elementsAnimes.length > 0) {
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
                     entry.target.classList.add('visible');
                     observer.unobserve(entry.target);
+                    // Une fois l'entrée jouée, on retire le délai pour que le survol reste réactif
+                    if (entry.target.dataset.delaiDomino) {
+                        setTimeout(() => { entry.target.style.transitionDelay = ''; }, 1500);
+                    }
                 }
             });
         }, { threshold: 0.15, rootMargin: '0px 0px -60px 0px' });
@@ -68,6 +84,38 @@ document.addEventListener('DOMContentLoaded', function () {
         elementsAnimes.forEach(el => observer.observe(el));
     } else {
         elementsAnimes.forEach(el => el.classList.add('visible'));
+    }
+
+    /* --- 3b. Parallaxe léger sur le hero (le contenu défile un peu moins vite) --- */
+    const heroContenu = document.querySelector('.hero-contenu');
+    if (heroContenu && !mouvementReduit) {
+        let ticket = false;
+        window.addEventListener('scroll', () => {
+            if (!ticket) {
+                requestAnimationFrame(() => {
+                    const y = window.scrollY;
+                    if (y < window.innerHeight) {
+                        heroContenu.style.transform = 'translateY(' + (y * 0.18) + 'px)';
+                        heroContenu.style.opacity = Math.max(1 - y / (window.innerHeight * 0.9), 0);
+                    }
+                    ticket = false;
+                });
+                ticket = true;
+            }
+        }, { passive: true });
+    }
+
+    /* --- 3c. Barre de progression de lecture (uniquement sur les articles) --- */
+    const contenuArticle = document.querySelector('.article-contenu');
+    if (contenuArticle && !mouvementReduit) {
+        const barre = document.createElement('div');
+        barre.className = 'progression-lecture';
+        document.body.appendChild(barre);
+        window.addEventListener('scroll', () => {
+            const hauteurTotale = document.documentElement.scrollHeight - window.innerHeight;
+            const progression = hauteurTotale > 0 ? (window.scrollY / hauteurTotale) * 100 : 0;
+            barre.style.width = progression + '%';
+        }, { passive: true });
     }
 
     /* --- 4. Compteurs animés (chiffres clés du bandeau confiance) --- */
