@@ -336,6 +336,10 @@ p.lead {
     gap: 5px;
     width: 28px;
     cursor: pointer;
+    /* réinitialisation du style bouton par défaut (élément <button>) */
+    border: none;
+    background: none;
+    padding: 0;
 }
 
 .menu-burger span {

@@ -10,8 +10,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const bandeauTel = document.createElement('a');
     bandeauTel.href = 'tel:+33781222522';
     bandeauTel.className = 'bandeau-tel-mobile';
-    bandeauTel.setAttribute('aria-label', 'Appeler IPP Renovare');
-    bandeauTel.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.37 1.9.72 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.35 1.85.59 2.81.72A2 2 0 0 1 22 16.92z"/></svg> Appeler maintenant : 07 81 22 25 22';
+    bandeauTel.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.37 1.9.72 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.35 1.85.59 2.81.72A2 2 0 0 1 22 16.92z"/></svg> Appeler maintenant : 07 81 22 25 22';
     document.body.insertBefore(bandeauTel, document.body.firstChild);
 
     // Ajout du bouton d'appel flottant en bas à droite (visible uniquement sur mobile)
@@ -89,9 +88,9 @@ document.addEventListener('DOMContentLoaded', function () {
         elementsAnimes.forEach(el => el.classList.add('visible'));
     }
 
-    /* --- 3b. Parallaxe léger sur le hero (le contenu défile un peu moins vite) --- */
+    /* --- 3b. Parallaxe léger sur le hero (desktop uniquement — coûteux sur mobile) --- */
     const heroContenu = document.querySelector('.hero-contenu');
-    if (heroContenu && !mouvementReduit) {
+    if (heroContenu && !mouvementReduit && window.innerWidth > 968) {
         let ticket = false;
         window.addEventListener('scroll', () => {
             if (!ticket) {
