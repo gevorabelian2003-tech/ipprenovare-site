@@ -24,3 +24,7 @@ __pycache__/
 
 # Local Netlify folder
 .netlify
+
+# Articles SEO en réserve : rédigés d'avance, publiés un par un au fil des semaines.
+# Ce dossier ne doit JAMAIS être déployé tant qu'un article y est encore en réserve.
+_seo-reserve/
