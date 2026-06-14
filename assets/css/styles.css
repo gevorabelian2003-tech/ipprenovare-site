@@ -1278,9 +1278,9 @@ p.lead {
 /* --- 19. Animations au scroll --- */
 .fade-in {
     opacity: 0;
-    transform: translateY(16px);
-    transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
-                transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+    transform: translateY(10px);
+    transition: opacity 0.6s ease-out,
+                transform 0.6s ease-out;
     will-change: opacity, transform;
 }
 
