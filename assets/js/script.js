@@ -57,11 +57,12 @@ document.addEventListener('DOMContentLoaded', function () {
     const mouvementReduit = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const elementsAnimes = document.querySelectorAll('.fade-in');
 
-    // Effet domino : dans une même grille, les cartes apparaissent l'une après l'autre
+    // Effet domino léger : dans une même grille, les cartes apparaissent l'une après l'autre
+    // (décalage réduit pour rester fluide, pas saccadé)
     if (!mouvementReduit) {
         document.querySelectorAll('.grille-services, .blog-grille, .galerie-grille, .benefices, .materiaux, .tarifs, .timeline, .grille').forEach(grille => {
             grille.querySelectorAll(':scope > .fade-in').forEach((el, i) => {
-                el.style.transitionDelay = Math.min(i * 90, 540) + 'ms';
+                el.style.transitionDelay = Math.min(i * 55, 220) + 'ms';
                 el.dataset.delaiDomino = '1';
             });
         });
@@ -75,11 +76,13 @@ document.addEventListener('DOMContentLoaded', function () {
                     observer.unobserve(entry.target);
                     // Une fois l'entrée jouée, on retire le délai pour que le survol reste réactif
                     if (entry.target.dataset.delaiDomino) {
-                        setTimeout(() => { entry.target.style.transitionDelay = ''; }, 1500);
+                        setTimeout(() => { entry.target.style.transitionDelay = ''; }, 1200);
                     }
                 }
             });
-        }, { threshold: 0.15, rootMargin: '0px 0px -60px 0px' });
+        // Déclenchement plus tôt : l'élément commence à apparaître dès qu'un petit bout
+        // entre dans l'écran, pour une révélation anticipée et douce (plus de "pop")
+        }, { threshold: 0.01, rootMargin: '0px 0px -8% 0px' });
 
         elementsAnimes.forEach(el => observer.observe(el));
     } else {
