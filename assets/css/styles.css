@@ -2423,6 +2423,156 @@ html {
     }
 }
 
+/* --- 38. ALBUM PHOTOS --- */
+.album-sommaire {
+    margin-top: 1.5rem !important;
+    font-size: 0.95rem;
+    color: rgba(255,255,255,0.75);
+}
+.album-sommaire a {
+    color: var(--blanc);
+    border-bottom: 1px solid var(--rouge);
+    padding-bottom: 2px;
+    white-space: nowrap;
+}
+.album-sommaire a:hover { color: var(--rouge); }
+
+/* Mini-tuto : étapes */
+.album-tuto {
+    background: var(--gris-tres-clair);
+    border-radius: var(--rayon);
+    padding: 2rem;
+    margin: 0 auto 3rem;
+    max-width: 1000px;
+    border-left: 4px solid var(--rouge);
+}
+.section-claire .album-tuto { background: var(--fond); }
+.album-etapes {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+    gap: 1.5rem;
+    margin-top: 1.25rem;
+}
+.album-etape {
+    display: flex;
+    gap: 0.9rem;
+    align-items: flex-start;
+}
+.album-etape-num {
+    flex-shrink: 0;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--rouge), var(--rouge-fonce));
+    color: var(--blanc);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--police-titres);
+    font-weight: 600;
+    font-size: 1.1rem;
+    box-shadow: 0 4px 12px rgba(165,14,23,0.3);
+}
+.album-etape h4 { font-family: var(--police-corps); font-size: 1rem; margin-bottom: 0.25rem; color: var(--noir); }
+.album-etape p { font-size: 0.9rem; margin: 0; }
+
+/* Grille masonry (gère portrait + paysage) */
+.album-grille {
+    columns: 3 300px;
+    column-gap: 1rem;
+}
+.album-photo {
+    break-inside: avoid;
+    margin: 0 0 1rem;
+    position: relative;
+    border-radius: var(--rayon);
+    overflow: hidden;
+    cursor: zoom-in;
+    box-shadow: var(--ombre-douce);
+    background: linear-gradient(135deg, var(--noir), var(--rouge));
+}
+.album-photo img {
+    width: 100%;
+    display: block;
+    transition: transform 0.5s ease;
+}
+.album-photo:hover img { transform: scale(1.05); }
+.album-photo figcaption {
+    position: absolute;
+    left: 0; right: 0; bottom: 0;
+    padding: 1.5rem 1rem 0.9rem;
+    background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+    color: var(--blanc);
+    font-size: 0.88rem;
+    opacity: 0;
+    transform: translateY(8px);
+    transition: all var(--transition);
+}
+.album-photo:hover figcaption { opacity: 1; transform: translateY(0); }
+
+@media (max-width: 600px) {
+    .album-grille { columns: 2 150px; column-gap: 0.6rem; }
+    .album-photo { margin-bottom: 0.6rem; }
+    .album-photo figcaption { opacity: 1; transform: none; font-size: 0.78rem; padding: 1rem 0.7rem 0.6rem; }
+}
+
+/* Lightbox */
+.lightbox {
+    position: fixed;
+    inset: 0;
+    background: rgba(10,10,10,0.94);
+    z-index: 2000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+}
+.lightbox.ouvert { display: flex; }
+.lightbox-contenu {
+    max-width: 92vw;
+    max-height: 88vh;
+    margin: 0;
+    text-align: center;
+}
+.lightbox-contenu img {
+    max-width: 92vw;
+    max-height: 80vh;
+    border-radius: var(--rayon);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+}
+.lightbox-contenu figcaption {
+    color: var(--blanc);
+    margin-top: 1rem;
+    font-family: var(--police-titres);
+    font-size: 1.15rem;
+    font-style: italic;
+}
+.lightbox-fermer, .lightbox-prec, .lightbox-suiv {
+    position: absolute;
+    background: rgba(255,255,255,0.12);
+    color: var(--blanc);
+    border: none;
+    cursor: pointer;
+    width: 54px;
+    height: 54px;
+    border-radius: 50%;
+    font-size: 2rem;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background var(--transition);
+}
+.lightbox-fermer:hover, .lightbox-prec:hover, .lightbox-suiv:hover { background: var(--rouge); }
+.lightbox-fermer { top: 1.5rem; right: 1.5rem; }
+.lightbox-prec { left: 1.5rem; top: 50%; transform: translateY(-50%); }
+.lightbox-suiv { right: 1.5rem; top: 50%; transform: translateY(-50%); }
+@media (max-width: 600px) {
+    .lightbox-prec { left: 0.5rem; }
+    .lightbox-suiv { right: 0.5rem; }
+    .lightbox-fermer { top: 0.8rem; right: 0.8rem; }
+}
+
 /* --- 21. Utilitaires --- */
 .tel-direct {
     display: inline-flex;
