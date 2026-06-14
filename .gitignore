@@ -21,3 +21,6 @@ __pycache__/
 
 # Configuration de prévisualisation locale
 .claude/
+
+# Local Netlify folder
+.netlify
