@@ -47,6 +47,9 @@
     <meta name="theme-color" content="#a50e17">
     <meta name="format-detection" content="telephone=yes">
 
+    <!-- Préchargement de l'image héros (LCP) — accélère l'affichage principal -->
+    <link rel="preload" as="image" href="assets/images/hero-accueil.jpg" imagesrcset="assets/images/hero-accueil-mobile.jpg 960w, assets/images/hero-accueil.jpg 1920w" imagesizes="100vw" fetchpriority="high">
+
     <!-- Polices Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
