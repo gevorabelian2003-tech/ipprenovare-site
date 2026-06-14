@@ -2,9 +2,9 @@
 
 [build]
     publish = "."
-    # Pas de build complexe : le site est déjà en HTML statique
-    # Si on ajoute un build pour générer les nouveaux articles depuis Markdown :
-    # command = "python build.py"
+    # Génère les articles créés via /admin (Markdown -> HTML) à chaque déploiement
+    command = "python3 build.py"
+    functions = "netlify/functions"
 
 # Activer Netlify Identity pour l'authentification de l'admin
 [context.production.environment]

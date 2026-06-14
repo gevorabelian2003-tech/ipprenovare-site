@@ -2,8 +2,11 @@
 # Documentation : https://decapcms.org/docs/
 
 backend:
-  name: git-gateway
+  name: github
+  repo: gevorabelian2003-tech/ipprenovare-site
   branch: main
+  base_url: https://ipprenovare.com
+  auth_endpoint: .netlify/functions/auth
 
 # Branche pour publier directement (pas de workflow editorial pour rester simple)
 publish_mode: simple
