@@ -6,7 +6,7 @@ Lit les fichiers Markdown de _articles/ et :
  2. injecte les cartes correspondantes dans blog.html entre les marqueurs CMS
 Pur Python (stdlib) — aucune dépendance, ne casse jamais le site existant.
 """
-import os, re, html, datetime
+import os, re, html, datetime, unicodedata
 
 ICI = os.path.dirname(os.path.abspath(__file__))
 DOSSIER_ARTICLES = os.path.join(ICI, "_articles")
@@ -212,45 +212,90 @@ GALERIE_CATS = {
     "peinture":      "Peinture",
 }
 
-def figure_photo(meta):
-    cat = meta.get("categorie", "platrerie")
-    if cat not in GALERIE_CATS:
-        cat = "platrerie"
+def slugify(txt):
+    """Transforme 'Enduits décoratifs' -> 'enduits-decoratifs' (pour l'id du rayon)."""
+    txt = unicodedata.normalize("NFKD", txt).encode("ascii", "ignore").decode("ascii")
+    txt = re.sub(r'[^a-zA-Z0-9]+', '-', txt).strip('-').lower()
+    return txt or "autre"
+
+def infos_categorie(meta):
+    """Renvoie (slug, nom affiché). Priorité au champ 'nouvelle_categorie' si rempli."""
+    nouvelle = meta.get("nouvelle_categorie", "").strip()
+    if nouvelle:
+        return slugify(nouvelle), nouvelle
+    slug = meta.get("categorie", "platrerie")
+    if slug not in GALERIE_CATS:
+        slug = "platrerie"
+    return slug, GALERIE_CATS[slug]
+
+def figure_photo(meta, slug, nom):
     src = meta.get("image", "").strip()
     legende = html.escape(meta.get("legende", ""))
-    alt = f"{GALERIE_CATS[cat]} à Nancy — {legende}" if legende else f"{GALERIE_CATS[cat]} à Nancy"
-    return cat, f'''                    <figure class="album-photo" data-cat="{cat}">
+    alt = f"{html.escape(nom)} à Nancy — {legende}" if legende else f"{html.escape(nom)} à Nancy"
+    return f'''                    <figure class="album-photo" data-cat="{slug}">
                         <img src="{html.escape(src)}" alt="{alt}" loading="lazy" data-legende="{legende}">
                         <figcaption>{legende}</figcaption>
                     </figure>'''
 
 def galerie():
-    """Range chaque photo publiée via /admin dans le bon rayon de album.html."""
+    """Range chaque photo publiée via /admin dans le bon rayon de album.html.
+    Si une photo indique une catégorie inédite, un nouveau rayon est créé
+    automatiquement en bas de l'album — le client est autonome."""
     if not os.path.isdir(DOSSIER_GALERIE):
         return 0
-    # regrouper les photos par catégorie (plus récentes en premier)
-    par_cat = {c: [] for c in GALERIE_CATS}
+    # lire et trier les photos (plus récentes d'abord)
     entrees = []
     for f in sorted(os.listdir(DOSSIER_GALERIE)):
         if f.endswith(".md"):
             meta, _ = parse_article(os.path.join(DOSSIER_GALERIE, f))
             entrees.append((meta.get("date", ""), meta))
-    entrees.sort(key=lambda x: x[0], reverse=True)  # plus récentes d'abord
-    n = 0
+    entrees.sort(key=lambda x: x[0], reverse=True)
+
+    par_slug, noms, n = {}, {}, 0
     for _, meta in entrees:
-        cat, fig = figure_photo(meta)
-        par_cat.setdefault(cat, []).append(fig); n += 1
+        slug, nom = infos_categorie(meta)
+        par_slug.setdefault(slug, []).append(figure_photo(meta, slug, nom))
+        noms[slug] = nom
+        n += 1
 
     album_path = os.path.join(ICI, "album.html")
     album = open(album_path, encoding="utf-8").read()
+
+    # 1) rayons existants : injection entre leurs marqueurs
     for cat in GALERIE_CATS:
-        figs = "\n".join(par_cat.get(cat, []))
+        figs = "\n".join(par_slug.get(cat, []))
         contenu = f"<!-- GALERIE:{cat}:START -->"
         if figs:
             contenu += "\n" + figs + "\n                    "
         contenu += f"<!-- GALERIE:{cat}:END -->"
         motif = re.compile(rf'<!-- GALERIE:{cat}:START -->.*?<!-- GALERIE:{cat}:END -->', re.DOTALL)
         album = motif.sub(lambda m: contenu, album)
+
+    # 2) rayons inédits : sections créées automatiquement (bloc GALERIE-AUTO)
+    nouveaux = [s for s in par_slug if s not in GALERIE_CATS]
+    sections = []
+    for idx, slug in enumerate(nouveaux):
+        nom = html.escape(noms[slug])
+        figs = "\n".join(par_slug[slug])
+        classe = "section section-claire" if idx % 2 == 0 else "section"
+        sections.append(f'''        <section class="{classe}" id="{slug}">
+            <div class="container">
+                <div class="entete-section fade-in">
+                    <span class="surtitre">{nom}</span>
+                    <h2>{nom}</h2>
+                    <p class="lead">Nos chantiers « {nom} » à Nancy, Laxou et dans le Grand Est.</p>
+                </div>
+                <div class="album-grille">
+{figs}
+                </div>
+            </div>
+        </section>''')
+    auto = "<!-- GALERIE-AUTO:START -->"
+    if sections:
+        auto += "\n" + "\n".join(sections) + "\n        "
+    auto += "<!-- GALERIE-AUTO:END -->"
+    album = re.sub(r'<!-- GALERIE-AUTO:START -->.*?<!-- GALERIE-AUTO:END -->', lambda m: auto, album, flags=re.DOTALL)
+
     open(album_path, "w", encoding="utf-8").write(album)
     return n
 

@@ -139,5 +139,6 @@ collections:
           - { label: "Isolation thermique & acoustique", value: "isolation" }
           - { label: "Rénovation complète", value: "renovation" }
           - { label: "Peinture & finitions", value: "peinture" }
+      - { label: "➕ OU créer un nouveau rayon (optionnel)", name: "nouvelle_categorie", widget: "string", required: false, hint: "Laissez VIDE pour utiliser un rayon ci-dessus. Écrivez ici un nom SEULEMENT si la photo ne rentre dans aucun rayon existant (ex : Enduits décoratifs, Façades extérieures) — un nouveau rayon sera créé automatiquement dans l'album." }
       - { label: "Légende (petite phrase affichée sous la photo)", name: "legende", widget: "string", hint: "Ex : Plafond rampant lissé à Laxou. Aussi utile pour Google (référencement)." }
       - { label: "Date de la photo", name: "date", widget: "datetime", default: "", required: false, hint: "Les plus récentes s'affichent en premier dans leur rayon." }
