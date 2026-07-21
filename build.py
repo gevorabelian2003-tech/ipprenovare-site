@@ -10,6 +10,7 @@ import os, re, html, datetime
 
 ICI = os.path.dirname(os.path.abspath(__file__))
 DOSSIER_ARTICLES = os.path.join(ICI, "_articles")
+DOSSIER_GALERIE = os.path.join(ICI, "_galerie")
 
 # ---------- Mini-convertisseur Markdown -> HTML (sous-ensemble suffisant) ----------
 def md_inline(t):
@@ -200,6 +201,59 @@ def carte_blog(meta, slug):
                     </a>
                 </article>'''
 
+# ---------- Galerie photos (créées via /admin -> _galerie/*.md) ----------
+# Rayons de l'album : slug -> (mot-clé alt court)
+GALERIE_CATS = {
+    "platrerie":     "Plâtrerie",
+    "cloisons":      "Cloisons",
+    "faux-plafonds": "Faux-plafond",
+    "isolation":     "Isolation",
+    "renovation":    "Rénovation",
+    "peinture":      "Peinture",
+}
+
+def figure_photo(meta):
+    cat = meta.get("categorie", "platrerie")
+    if cat not in GALERIE_CATS:
+        cat = "platrerie"
+    src = meta.get("image", "").strip()
+    legende = html.escape(meta.get("legende", ""))
+    alt = f"{GALERIE_CATS[cat]} à Nancy — {legende}" if legende else f"{GALERIE_CATS[cat]} à Nancy"
+    return cat, f'''                    <figure class="album-photo" data-cat="{cat}">
+                        <img src="{html.escape(src)}" alt="{alt}" loading="lazy" data-legende="{legende}">
+                        <figcaption>{legende}</figcaption>
+                    </figure>'''
+
+def galerie():
+    """Range chaque photo publiée via /admin dans le bon rayon de album.html."""
+    if not os.path.isdir(DOSSIER_GALERIE):
+        return 0
+    # regrouper les photos par catégorie (plus récentes en premier)
+    par_cat = {c: [] for c in GALERIE_CATS}
+    entrees = []
+    for f in sorted(os.listdir(DOSSIER_GALERIE)):
+        if f.endswith(".md"):
+            meta, _ = parse_article(os.path.join(DOSSIER_GALERIE, f))
+            entrees.append((meta.get("date", ""), meta))
+    entrees.sort(key=lambda x: x[0], reverse=True)  # plus récentes d'abord
+    n = 0
+    for _, meta in entrees:
+        cat, fig = figure_photo(meta)
+        par_cat.setdefault(cat, []).append(fig); n += 1
+
+    album_path = os.path.join(ICI, "album.html")
+    album = open(album_path, encoding="utf-8").read()
+    for cat in GALERIE_CATS:
+        figs = "\n".join(par_cat.get(cat, []))
+        contenu = f"<!-- GALERIE:{cat}:START -->"
+        if figs:
+            contenu += "\n" + figs + "\n                    "
+        contenu += f"<!-- GALERIE:{cat}:END -->"
+        motif = re.compile(rf'<!-- GALERIE:{cat}:START -->.*?<!-- GALERIE:{cat}:END -->', re.DOTALL)
+        album = motif.sub(lambda m: contenu, album)
+    open(album_path, "w", encoding="utf-8").write(album)
+    return n
+
 def main():
     articles = []
     if os.path.isdir(DOSSIER_ARTICLES):
@@ -222,7 +276,8 @@ def main():
     if "<!-- CMS:START -->" in blog and "<!-- CMS:END -->" in blog:
         blog = re.sub(r'<!-- CMS:START -->.*?<!-- CMS:END -->', lambda m: bloc, blog, flags=re.DOTALL)
         open(blog_path, "w", encoding="utf-8").write(blog)
-    print(f"build.py : {len(articles)} article(s) CMS généré(s)")
+    nb_photos = galerie()
+    print(f"build.py : {len(articles)} article(s) CMS généré(s), {nb_photos} photo(s) de galerie rangée(s)")
 
 if __name__ == "__main__":
     main()

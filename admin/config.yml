@@ -110,3 +110,34 @@ collections:
       - { label: "Texte de l'avis", name: "texte", widget: "text" }
       - { label: "Source", name: "source", widget: "select", options: ["Google", "Pages Jaunes", "Bouche-à-oreille", "Autre"], default: "Google" }
       - { label: "Date", name: "date", widget: "datetime" }
+
+  # ========================================
+  # COLLECTION 4 : Galerie photos (ajouter des photos de chantier dans l'album)
+  # ========================================
+  - name: "galerie"
+    label: "📸 Galerie photos"
+    label_singular: "Photo"
+    folder: "_galerie"
+    create: true
+    delete: true
+    identifier_field: "legende"
+    extension: "md"
+    format: "yaml-frontmatter"
+    slug: "{{year}}{{month}}{{day}}-{{hour}}{{minute}}-{{fields.legende}}"
+    summary: "{{legende}}  ·  {{categorie}}"
+    preview_path: "album.html"
+    fields:
+      - { label: "Photo du chantier", name: "image", widget: "image", hint: "Choisissez une belle photo nette. Format paysage de préférence — elle apparaîtra dans l'album en ligne." }
+      - label: "Catégorie (le rayon de l'album où ranger la photo)"
+        name: "categorie"
+        widget: "select"
+        default: "platrerie"
+        options:
+          - { label: "Plâtrerie traditionnelle", value: "platrerie" }
+          - { label: "Cloisons & doublages", value: "cloisons" }
+          - { label: "Faux-plafonds & éclairage intégré", value: "faux-plafonds" }
+          - { label: "Isolation thermique & acoustique", value: "isolation" }
+          - { label: "Rénovation complète", value: "renovation" }
+          - { label: "Peinture & finitions", value: "peinture" }
+      - { label: "Légende (petite phrase affichée sous la photo)", name: "legende", widget: "string", hint: "Ex : Plafond rampant lissé à Laxou. Aussi utile pour Google (référencement)." }
+      - { label: "Date de la photo", name: "date", widget: "datetime", default: "", required: false, hint: "Les plus récentes s'affichent en premier dans leur rayon." }
